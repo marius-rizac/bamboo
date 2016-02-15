@@ -43,8 +43,6 @@ class PageExtension extends Twig_Extension
     public function __construct(PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
-
-        return $this;
     }
 
     /**

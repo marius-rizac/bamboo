@@ -20,8 +20,9 @@ namespace Elcodi\Store\PageBundle\Twig;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
-use Elcodi\Component\Page\ElcodiPageTypes;
 use Elcodi\Component\Page\Repository\PageRepository;
+use Elcodi\Store\PageBundle\Twig\Functions\ElcodiBlogPagesFunction;
+use Elcodi\Store\PageBundle\Twig\Functions\ElcodiFooterPagesFunction;
 
 /**
  * Class PageExtension
@@ -53,43 +54,9 @@ class PageExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction('elcodi_footer_pages', [$this, 'getFooterPages']),
-            new Twig_SimpleFunction('elcodi_blog_pages', [$this, 'getBlogPages']),
+            new ElcodiFooterPagesFunction($this->pageRepository),
+            new ElcodiBlogPagesFunction($this->pageRepository),
         ];
-    }
-
-    /**
-     * Get footer pages
-     *
-     * @return array Collection of enabled pages for the footer
-     */
-    public function getFooterPages()
-    {
-        return $this
-            ->pageRepository
-            ->findBy([
-                'enabled' => true,
-                'type'    => ElcodiPageTypes::TYPE_REGULAR,
-            ]);
-    }
-
-    /**
-     * Get blog pages
-     *
-     * @param integer $page          Page
-     * @param integer $numberPerPage Number per page
-     *
-     * @return array Collection of enabled pages for the blog
-     */
-    public function getBlogPages($page = 1, $numberPerPage = 10)
-    {
-        return $this
-            ->pageRepository
-            ->findPages(
-                ElcodiPageTypes::TYPE_BLOG_POST,
-                $page,
-                $numberPerPage
-            );
     }
 
     /**
